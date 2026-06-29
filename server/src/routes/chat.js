@@ -35,6 +35,7 @@ chatRouter.post('/stream',
       sessionId = 'default',
       role = 'default',
       userId = 'anonymous',
+      regenerate = false,
     } = req.body
 
     // 设置 SSE 响应头
@@ -57,8 +58,8 @@ chatRouter.post('/stream',
       const profileCtx = profileToContext(profile)
       const systemPrompt = baseSystem + profileCtx
 
-      // 2. 精确缓存检查
-      const cached = cache.get(systemPrompt, message)
+      // 2. 精确缓存检查（重新生成时跳过缓存）
+      const cached = regenerate ? null : cache.get(systemPrompt, message)
       if (cached) {
         logger.info('cache hit', { sessionId, msg: message.slice(0, 30) })
         send('cache_hit', {})

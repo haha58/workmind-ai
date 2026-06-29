@@ -19,7 +19,7 @@ export const useMonitorStore = defineStore('monitor', () => {
   })
 
   // 记录一次 API 调用
-  function recordCall({ inputTokens = 0, outputTokens = 0, fromCache = false, feature = 'chat' }) {
+  function recordCall({ inputTokens = 0, outputTokens = 0, fromCache = false }) {
     totalCalls.value++
     if (fromCache) {
       cacheHits.value++

@@ -169,6 +169,7 @@ function dislike() {
   padding: 2px 8px;
   border-radius: var(--radius-full);
   margin-bottom: 4px;
+  width: fit-content;
 }
 
 .ai-bubble {

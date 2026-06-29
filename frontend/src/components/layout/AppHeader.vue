@@ -20,8 +20,8 @@
 
       <!-- 用户头像（演示用） -->
       <div class="user-info">
-        <div class="user-avatar">大</div>
-        <span class="user-name">大伟</span>
+        <div class="user-avatar">闻</div>
+        <span class="user-name">闻言</span>
       </div>
     </div>
   </header>

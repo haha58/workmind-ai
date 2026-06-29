@@ -23,13 +23,18 @@ validateConfig()
 const app = express()
 
 // ── 基础中间件 ─────────────────────────────────────────────────
+//Helmet 是一个 Express.js 的安全中间件,通过设置各种 HTTP 响应头来保护应用免受常见攻击。
+//contentSecurityPolicy: false 禁用了 Content-Security-Policy (CSP) 头
 app.use(helmet({ contentSecurityPolicy: false }))
+//compression 压缩 HTTP 响应,减少传输数据量,提升页面加载速度。
 app.use(compression())
 app.use(cors({
-  origin: config.app.allowedOrigins,
-  credentials: true,
+  origin: config.app.allowedOrigins,  // 指定允许访问 API 的前端域名列表
+  credentials: true, // 允许跨域请求携带 cookie
 }))
+// 限制请求体的最大大小为 5MB
 app.use(express.json({ limit: '5mb' }))
+// 注册一个请求日志中间件,用于记录所有进入服务器的 HTTP 请求信息
 app.use(requestLogger)
 
 // ── 路由注册 ───────────────────────────────────────────────────
