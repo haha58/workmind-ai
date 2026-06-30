@@ -88,6 +88,7 @@ export async function runAgent(task, onEvent) {
 
   try {
     let stepCount = 0
+    const toolStartTimes = new Map() // 记录每个工具的开始时间
 
     // streamEvents：LangGraph 内置的流式事件系统
     // 能拿到每个节点、每个工具调用、每个 token 的精细事件
@@ -95,17 +96,19 @@ export async function runAgent(task, onEvent) {
       { messages: [new HumanMessage(task)], steps: 0 },
       { version: 'v2' }
     )) {
-      const { event: eventType, name, data } = event
+      const { event: eventType, name, data, run_id } = event
 
       // 工具开始执行
       if (eventType === 'on_tool_start') {
         stepCount++
         const toolInput = data?.input
+        toolStartTimes.set(run_id, Date.now()) // 记录开始时间
         onEvent('tool_call', {
           step:     stepCount,
           toolName: name,
           args:     toolInput,
           label:    getToolLabel(name),
+          runId:    run_id, // 传递 run_id 用于匹配
         })
       }
 
@@ -116,10 +119,16 @@ export async function runAgent(task, onEvent) {
         if (typeof result === 'string') {
           try { result = JSON.parse(result) } catch {}
         }
+        const startMs = toolStartTimes.get(run_id)
+        const durationMs = startMs ? Date.now() - startMs : 0
+        toolStartTimes.delete(run_id) // 清理
+
         onEvent('tool_result', {
           toolName: name,
           result,
           resultText: typeof result === 'string' ? result : JSON.stringify(result),
+          durationMs: Math.max(1, durationMs), // 至少 1ms
+          runId: run_id,
         })
       }
 

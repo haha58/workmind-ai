@@ -37,8 +37,10 @@ export function createEmbeddings() {
   // 优先使用智谱 AI（key 格式 xxxx.xxxx）
   if (config.ai.zhipuKey) {
     return new ZhipuAIEmbeddings({
+      model:     config.ai.embedModel,
       apiKey:    config.ai.zhipuKey,
       modelName: 'embedding-3',
+      configuration: { baseURL: config.ai.embedBaseURL },
     })
   }
   // 其次使用 SiliconFlow / OpenAI 兼容接口

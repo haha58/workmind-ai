@@ -13,7 +13,7 @@
       </div>
       <div class="right">
         <!-- 执行时间 -->
-        <span v-if="step.durationMs" class="duration">{{ step.durationMs }}ms</span>
+        <span v-if="step.durationMs !== undefined && step.durationMs !== null" class="duration">{{ step.durationMs }}ms</span>
         <!-- 状态标签 -->
         <span class="status-tag" :class="step.status">
           {{ statusText }}
@@ -172,7 +172,7 @@ const resultText = computed(() => {
 .status-tag.done    { background: #dcfce7; color: #166534; }
 .status-tag.error   { background: #fee2e2; color: #991b1b; }
 
-.arrow { font-size: 10px; color: var(--color-text-muted); }
+.arrow { font-size: 16px; color: var(--color-text-muted); }
 
 /* 卡片内容 */
 .card-body {

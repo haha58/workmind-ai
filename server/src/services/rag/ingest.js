@@ -88,6 +88,7 @@ export async function getVectorStore() {
 const docRegistry = new Map()
 
 export function getDocRegistry() {
+  console.log('docRegistry', docRegistry)
   return [...docRegistry.values()]
 }
 
